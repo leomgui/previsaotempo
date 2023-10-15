@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Previsão do Tempo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Previsão do Tempo</h1>
+  <button id="buscarPrevisao" onclick="buscarPrevisao()">Buscar Previsão</button>
+  <div id="resultado"></div>
+
+  <script>
+    function buscarPrevisao() {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const apiKey = 'c5f07a45e1c6b8800b1f831b24eb67be';
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const resultado = document.getElementById('resultado');
+                    resultado.innerHTML = `
+                        <h2>Previsão do Tempo em ${data.name}, ${data.sys.country}</h2>
+                        <p>Temperatura: ${data.main.temp}°C</p>
+                    `;
+            })
+            .catch(error => {
+                console.error('Erro ao buscar previsão do tempo: ' + error);
+            });
+        });
+    }
+  </script>
+</body>
+</html>
